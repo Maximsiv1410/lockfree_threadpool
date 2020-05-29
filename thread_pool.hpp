@@ -20,7 +20,7 @@ public:
 
 
 	thread_pool(size_t amount) : amount(amount) {
-		status.store(true);
+		status.store(true, std::memory_order_relaxed);
 		for (int i = 0; i < amount; ++i) {
 			threadz.emplace_back(std::bind(&thread_pool::entry, this, i));
 		}
@@ -29,7 +29,7 @@ public:
 
 	void entry(int id) {
 		function_wrapper* task;
-		while (status.load()) {
+		while (status.load(std::memory_order_relaxed)) {
 			if (jobs.pop(task)) {
 				(*task)();
 				delete task;
@@ -51,7 +51,7 @@ public:
 	}
 
 	~thread_pool() {
-		status.store(false);
+		status.store(false, std::memory_order_relaxed);
 
 		for (auto&& thread : threadz) {
 			thread.join();
