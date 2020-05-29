@@ -1,6 +1,5 @@
 #include <iostream>
-#include <boost/asio.hpp>
-#include <boost/atomic.hpp>
+#include <future>
 #include <boost/lockfree/queue.hpp>
 
 
@@ -15,7 +14,7 @@ int main() {
 	std::vector<std::future<int>> futures;
 
 	for (int i = 0; i < 20; ++i) {
-		futures.emplace_back(pool.push(plus, i*i));
+		futures.push_back(pool.push(plus, i*i));
 	}
 
 	for (auto&& ft : futures) {
