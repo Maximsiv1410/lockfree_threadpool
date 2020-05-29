@@ -1,3 +1,6 @@
+#ifndef __LOCKFREE_THREADPOOL__
+#define __LOCKFREE_THREADPOOL__
+
 #include <thread>
 #include <vector>
 #include <boost/lockfree/queue.hpp>
@@ -61,3 +64,5 @@ public:
 		}
 	}
 };
+
+#endif
